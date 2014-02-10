@@ -6,7 +6,7 @@ Public Class Form1
     Dim datable As New DataTable
     Dim id_hrd As String
 
-    'Untuk Load id dari tabel training
+    'Untuk Load id dari tabel training ke combobox
     Sub Load_IdTran()
         cmd = New OracleCommand("select ID_TRAN from T_TRAINING", con)
         dr = cmd.ExecuteReader
@@ -15,7 +15,7 @@ Public Class Form1
         End While
     End Sub
 
-    'Load Data pese                                                                                                                                                                                                                                                                                                
+    'Load Data peserta ke datagridview                                                                                                                                                                                                                                                                                               
     Sub Load_DataPeserta()
         id_hrd = ComboBox1.SelectedItem.ToString
         con.Close()
@@ -31,6 +31,7 @@ Public Class Form1
         DataGridView1.ReadOnly = True
     End Sub
 
+    'Load data transaksi training ke dataset untuk ditampilkan ke crystalreport berdasarkan Id
     Sub Load_DataUmum()
         id_hrd = ComboBox1.SelectedItem.ToString
         da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.tgl_cr, 'fmdd MON yyyy')as tanggal,a.id_minta," &
@@ -83,6 +84,7 @@ Public Class Form1
         datable.Clear()
     End Sub
 
+    'Load semua data peserta training ke dataset untuk dicetak ke crystalreport
     Sub CetakSemua()
         da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.tgl_cr, 'fmdd MON yyyy')as tanggal,a.id_minta, a.jenis_t," &
                                    "a.jenis_p,a.tempat,to_char(a.tgl_1, 'fmdd MON yyyy')as tanggal_m,to_char(a.tgl_2, 'fmdd MON yyyy')as tanggal_s," &
