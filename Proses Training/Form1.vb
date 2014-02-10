@@ -6,24 +6,7 @@ Public Class Form1
     Dim datable As New DataTable
     Dim id_hrd As String
 
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Call koneksi()
-        Call Load_IdTran()
-    End Sub
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Call koneksi()
-        id_hrd = ComboBox1.SelectedItem.ToString
-        If id_hrd = "All" Then
-            If (MsgBox("Lanjutkan  Semua Data?", vbYesNoCancel) = MsgBoxResult.Yes) Then
-                Call CetakSemua()
-                Form2.Show()
-            End If
-        Else
-            Form2.Show()
-        End If
-    End Sub
-
+    'Untuk Load id dari tabel training
     Sub Load_IdTran()
         cmd = New OracleCommand("select ID_TRAN from T_TRAINING", con)
         dr = cmd.ExecuteReader
@@ -32,6 +15,7 @@ Public Class Form1
         End While
     End Sub
 
+    'Load Data pese                                                                                                                                                                                                                                                                                                
     Sub Load_DataPeserta()
         id_hrd = ComboBox1.SelectedItem.ToString
         con.Close()
@@ -49,7 +33,19 @@ Public Class Form1
 
     Sub Load_DataUmum()
         id_hrd = ComboBox1.SelectedItem.ToString
-        da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.tgl_cr, 'fmdd MON yyyy')as tanggal,a.id_minta, a.jenis_t,a.jenis_p,a.tempat,to_char(a.tgl_1, 'fmdd MON yyyy')as tanggal_m,to_char(a.tgl_2, 'fmdd MON yyyy')as tanggal_s, a.sumber,a.ket, f.nama as pembuat,j.n_jabatan as jab_buat,g.nama as pemeriksa, k.n_jabatan as jab_periksa,h.nama as menyetujui, l.n_jabatan as jab_setuju,i.nama as mengetahui, m.n_jabatan as jab_mengetahui, b.npk,c.nama,d.n_jabatan,e.nama_departemen from t_training a left join t_training_mem b on a.id_tran=b.id_tran left join karyawan c on b.npk=c.npk left join jab d on c.jab=d.id_jabatan left join dept e on c.dept=e.id_departemen left join karyawan f on f.npk=a.lev_1 left join karyawan g on g.npk=a.lev_2 left join karyawan h on h.npk=a.lev_3 left join karyawan i on i.npk=a.lev_4 left join jab j on j.id_jabatan=f.jab left join jab k on k.id_jabatan=g.jab left join jab l on l.id_jabatan=h.jab left join jab m on m.id_jabatan=i.jab where a.id_tran='" + id_hrd + "'", con)
+        da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.tgl_cr, 'fmdd MON yyyy')as tanggal,a.id_minta," &
+                                   " a.jenis_t,a.jenis_p,a.tempat,to_char(a.tgl_1, 'fmdd MON yyyy')as tanggal_m," &
+                                   " to_char(a.tgl_2, 'fmdd MON yyyy')as tanggal_s, a.sumber,a.ket, f.nama as pembuat," &
+                                   " j.n_jabatan as jab_buat,g.nama as pemeriksa, k.n_jabatan as jab_periksa," &
+                                   " h.nama as menyetujui, l.n_jabatan as jab_setuju,i.nama as mengetahui," &
+                                   " m.n_jabatan as jab_mengetahui, b.npk,c.nama,d.n_jabatan,e.nama_departemen" &
+                                   " from t_training a left join t_training_mem b on a.id_tran=b.id_tran" &
+                                   " left join karyawan c on b.npk=c.npk left join jab d on c.jab=d.id_jabatan" &
+                                   " left join dept e on c.dept=e.id_departemen left join karyawan f on f.npk=a.lev_1" &
+                                   " left join karyawan g on g.npk=a.lev_2 left join karyawan h on h.npk=a.lev_3" &
+                                   " left join karyawan i on i.npk=a.lev_4 left join jab j on j.id_jabatan=f.jab" &
+                                   " left join jab k on k.id_jabatan=g.jab left join jab l on l.id_jabatan=h.jab" &
+                                   " left join jab m on m.id_jabatan=i.jab where a.id_tran='" + id_hrd + "'", con)
         da.Fill(ds, "t_training")
         da.Fill(datable)
         If datable.Rows.Count = 0 Then
@@ -88,7 +84,15 @@ Public Class Form1
     End Sub
 
     Sub CetakSemua()
-        da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.tgl_cr, 'fmdd MON yyyy')as tanggal,a.id_minta, a.jenis_t,a.jenis_p,a.tempat,to_char(a.tgl_1, 'fmdd MON yyyy')as tanggal_m,to_char(a.tgl_2, 'fmdd MON yyyy')as tanggal_s, a.sumber,a.ket, f.nama as pembuat,j.n_jabatan as jab_buat,g.nama as pemeriksa, k.n_jabatan as jab_periksa,h.nama as menyetujui, l.n_jabatan as jab_setuju,i.nama as mengetahui, m.n_jabatan as jab_mengetahui, b.npk,c.nama,d.n_jabatan,e.nama_departemen from t_training a left join t_training_mem b on a.id_tran=b.id_tran left join karyawan c on b.npk=c.npk left join jab d on c.jab=d.id_jabatan left join dept e on c.dept=e.id_departemen left join karyawan f on f.npk=a.lev_1 left join karyawan g on g.npk=a.lev_2 left join karyawan h on h.npk=a.lev_3 left join karyawan i on i.npk=a.lev_4 left join jab j on j.id_jabatan=f.jab left join jab k on k.id_jabatan=g.jab left join jab l on l.id_jabatan=h.jab left join jab m on m.id_jabatan=i.jab", con)
+        da = New OracleDataAdapter("select a.id_tran,a.status,to_char(a.tgl_cr, 'fmdd MON yyyy')as tanggal,a.id_minta, a.jenis_t," &
+                                   "a.jenis_p,a.tempat,to_char(a.tgl_1, 'fmdd MON yyyy')as tanggal_m,to_char(a.tgl_2, 'fmdd MON yyyy')as tanggal_s," &
+                                   " a.sumber,a.ket, f.nama as pembuat,j.n_jabatan as jab_buat,g.nama as pemeriksa, k.n_jabatan as jab_periksa," &
+                                   "h.nama as menyetujui, l.n_jabatan as jab_setuju,i.nama as mengetahui, m.n_jabatan as jab_mengetahui," &
+                                   " b.npk,c.nama,d.n_jabatan,e.nama_departemen from t_training a left join t_training_mem b on a.id_tran=b.id_tran" &
+                                   " left join karyawan c on b.npk=c.npk left join jab d on c.jab=d.id_jabatan left join dept e on c.dept=e.id_departemen" &
+                                   " left join karyawan f on f.npk=a.lev_1 left join karyawan g on g.npk=a.lev_2 left join karyawan h on h.npk=a.lev_3" &
+                                   " left join karyawan i on i.npk=a.lev_4 left join jab j on j.id_jabatan=f.jab left join jab k on k.id_jabatan=g.jab" &
+                                   " left join jab l on l.id_jabatan=h.jab left join jab m on m.id_jabatan=i.jab", con)
         ds = New DataSet
         da.Fill(ds, "t_training")
     End Sub
@@ -99,8 +103,27 @@ Public Class Form1
         Call Load_DataUmum()
     End Sub
 
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Call koneksi()
+        id_hrd = ComboBox1.SelectedItem.ToString
+        If id_hrd = "All" Then
+            If (MsgBox("Lanjutkan  Semua Data?", vbYesNoCancel) = MsgBoxResult.Yes) Then
+                Call CetakSemua()
+                Form2.Show()
+            End If
+        Else
+            Form2.Show()
+        End If
+    End Sub
+
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         Call koneksi()
         Form3.Show()
     End Sub
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Call koneksi()
+        Call Load_IdTran()
+    End Sub
+
 End Class
